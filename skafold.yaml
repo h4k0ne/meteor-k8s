@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2alpha2
+kind: Config
+build:
+  tagPolicy:
+    gitCommit: {}       # use git commit policy
+  artifacts:
+  - image: registry.gitlab.com/thakkaryash94/skaffold-example
+    context: backend
+    sync:
+      manual:
+      # Sync all the javascript files that are in the src folder
+      # with the container src folder
+      - src: 'src/**/*.js'
+        dest: .

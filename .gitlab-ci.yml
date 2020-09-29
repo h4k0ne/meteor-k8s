@@ -1,0 +1,21 @@
+image: docker
+services:
+ - docker:dind
+stages:
+  - deploy
+variables:
+  DOCKER_DRIVER: overlay2
+  KUBE_CONFIG_FILE: /etc/deploy/config
+deploy:
+  stage: deploy
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - mkdir -p /etc/deploy                                  # Create a folder for config file
+    - echo ${KUBE_CONFIG} | base64 -d > ${KUBE_CONFIG_FILE}      # Write kubernetes config in config file
+    - apk add --update --no-cache curl git     # Install dependencies
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl    # Download kubectl binary
+    - chmod +x ./kubectl
+    - mv ./kubectl /usr/local/bin/kubectl
+    - curl -Lo skaffold https://storage.googleapis.com/skaffold/builds/latest/skaffold-linux-amd64              # Download skaffold binary
+    - chmod +x skaffold
+    - ./skaffold run --kubeconfig /etc/deploy/config       # actual build, tag, push and deploy command
