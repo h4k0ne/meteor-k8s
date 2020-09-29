@@ -26,8 +26,8 @@ spec:
         app: node
     spec:
       containers:
-      - name: skaffold-example
-        image: registry.gitlab.com/thakkaryash94/skaffold-example
+      - name: todolist
+        image: gurbainot/meteor-k8s:latest
         ports:
         - containerPort: 3000
       imagePullSecrets:

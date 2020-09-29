@@ -4,11 +4,11 @@ build:
   tagPolicy:
     gitCommit: {}       # use git commit policy
   artifacts:
-  - image: registry.gitlab.com/thakkaryash94/skaffold-example
+  - image: gurbainot/meteor-k8s:latest
     context: backend
     sync:
       manual:
       # Sync all the javascript files that are in the src folder
       # with the container src folder
-      - src: 'src/**/*.js'
+      - src: '*'
         dest: .
